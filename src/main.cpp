@@ -5,6 +5,8 @@
 #include <cstring>
 
 #include "../include/ThreadPool.h"
+#include "../include/Router.h"
+#include "../include/HTTPRequest.h"
 
 const u_int PORT = 8080;
 
@@ -37,6 +39,7 @@ int main() {
 
     // Threadpool implementation
     ThreadPool pool(15);
+    Router router;
 
     while(true) {
         socklen_t client_len = sizeof(sockAddr);
@@ -46,23 +49,28 @@ int main() {
             continue;
         }
 
-        pool.enqueueTask([client_socket]() {
-            char buffer[1024] = {0};
+        pool.enqueueTask([client_socket, &router]() {
+            char buffer[4096] = {0};
             int bytes_received = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
             if (bytes_received > 0) {
                 buffer[bytes_received] = '\0';
                 std::cout << "Received request:\n" << buffer << std::endl;
             }
 
-            const char* response =
-                "HTTP/1.1 200 OK\r\n"
-                "Content-Type: text/plain\r\n"
-                "Content-Length: 12\r\n"
-                "Connection: close\r\n"
-                "\r\n"
-                "Hello World\n";
+            // const char* response =
+            //     "HTTP/1.1 200 OK\r\n"
+            //     "Content-Type: text/plain\r\n"
+            //     "Content-Length: 12\r\n"
+            //     "Connection: close\r\n"
+            //     "\r\n"
+            //     "Hello World\n";
 
-            send(client_socket, response, strlen(response), 0);
+            std::string rawRequest(buffer);
+            HTTPRequest request = HTTPRequest::parse(rawRequest);
+
+            std::string response = router.route(request.path, request.body);
+
+            send(client_socket, response.c_str(), response.length(), 0);
             close(client_socket);
         });
     }
