@@ -1,32 +1,37 @@
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -g
+LDFLAGS =
+
 SRC_DIR = src
 OUTPUT_DIR = output
+EXEC = server
 
-EXEC = main
+OBJS = $(OUTPUT_DIR)/server.o \
+       $(OUTPUT_DIR)/ThreadPool.o \
+       $(OUTPUT_DIR)/HTTPRequest.o \
+       $(OUTPUT_DIR)/HTTPResponse.o \
+       $(OUTPUT_DIR)/Router.o \
+       $(OUTPUT_DIR)/AppDispatcher.o \
+       $(OUTPUT_DIR)/ActionDispatcher.o \
+       $(OUTPUT_DIR)/StaticServer.o
 
-# Object files with output directory
-OBJS = $(OUTPUT_DIR)/main.o $(OUTPUT_DIR)/threadPool.o $(OUTPUT_DIR)/router.o $(OUTPUT_DIR)/httprequest.o
+# Pattern rule to compile .cpp to .o
+$(OUTPUT_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OUTPUT_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Final target
+# Link final executable
 $(EXEC): $(OBJS)
-	g++ $(OBJS) -o $(EXEC)
-
-# Ensure OUTPUT_DIR exists before compiling
-$(OUTPUT_DIR)/main.o: $(SRC_DIR)/main.cpp | $(OUTPUT_DIR)
-	g++ -c $(SRC_DIR)/main.cpp -o $(OUTPUT_DIR)/main.o
-
-$(OUTPUT_DIR)/threadPool.o: $(SRC_DIR)/ThreadPool.cpp | $(OUTPUT_DIR)
-	g++ -c $(SRC_DIR)/ThreadPool.cpp -o $(OUTPUT_DIR)/threadPool.o
-
-$(OUTPUT_DIR)/router.o: $(SRC_DIR)/Router.cpp | $(OUTPUT_DIR)
-	g++ -c $(SRC_DIR)/Router.cpp -o $(OUTPUT_DIR)/router.o
-
-$(OUTPUT_DIR)/httprequest.o: $(SRC_DIR)/HTTPRequest.cpp | $(OUTPUT_DIR)
-	g++ -c $(SRC_DIR)/HTTPRequest.cpp -o $(OUTPUT_DIR)/httprequest.o
+	$(CXX) $(OBJS) $(LDFLAGS) -o $(EXEC)
 
 # Create output directory if it doesn't exist
 $(OUTPUT_DIR):
 	mkdir -p $(OUTPUT_DIR)
 
-# Clean rule
+# Utilities
 clean:
 	rm -f $(EXEC) $(OUTPUT_DIR)/*.o
+
+rebuild: clean $(EXEC)
+
+run: $(EXEC)
+	./$(EXEC)

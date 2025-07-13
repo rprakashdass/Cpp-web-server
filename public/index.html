@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AppDispatcher Test</title>
+</head>
+<body>
+    <h1>Test JSON POST Request</h1>
+    
+    <form id="jsonForm">
+        <label for="action">Action:</label>
+        <input type="text" id="action" name="action" value="echo"><br><br>
+
+        <label for="text">Text:</label>
+        <input type="text" id="text" name="text" value="This is an example text"><br><br>
+
+        <button type="submit">Send JSON</button>
+    </form>
+
+    <pre id="responseOutput"></pre>
+
+    <script>
+        const form = document.getElementById('jsonForm');
+        const output = document.getElementById('responseOutput');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const payload = {
+                action: document.getElementById('action').value,
+                text: document.getElementById('text').value
+            };
+
+            fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.text())
+            .then(data => {
+                output.textContent = "Response:\n" + data;
+            })
+            .catch(error => {
+                output.textContent = "Error:\n" + error;
+            });
+        });
+    </script>
+</body>
+</html>

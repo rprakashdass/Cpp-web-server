@@ -1,14 +1,14 @@
 #include "../include/Router.h"
 
-void Router::addRoute(const std::string& path, HandlerFunc handler) {
-    routes[path] = handler;
+void Router::registerAction(const std::string& action, ActionHandler handler) {
+    handlers[action] = handler;
 }
 
-std::string Router::route(const std::string& path, const std::string body) {
-    if(routes.find(path) == routes.end()) {
-        return "404 Not Found";
-    } else {
-        std::cout << "Routing to " << path << std::endl;
-        return routes[path](body);
+HTTPResponse Router::dispatchAction(const std::string& path, const std::string& body) const {
+    auto it = handlers.find(path);
+    if (it != handlers.end()) {
+        return HTTPResponse::ok(200, it->second(body));
     }
+
+    return HTTPResponse::error(404, "Action not found");
 }

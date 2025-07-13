@@ -2,18 +2,19 @@
 #define ROUTER_H
 
 #include <string>
-#include <iostream>
 #include <functional>
 #include <unordered_map>
+#include "../include/HTTPResponse.h"
 
 class Router {
 public:
-    using HandlerFunc = std::function<std::string(const std::string&)>;
+    using ActionHandler = std::function<std::string(const std::string& body)>;
 
-    void addRoute(const std::string& path, HandlerFunc handler);
-    std::string route(const std::string& path, const std::string);
+    void registerAction(const std::string& action, ActionHandler handler);
+    HTTPResponse dispatchAction(const std::string& path, const std::string& body) const;
+
 private:
-    std::unordered_map<std::string, HandlerFunc> routes;
+    std::unordered_map<std::string, ActionHandler> handlers;
 };
 
 #endif
