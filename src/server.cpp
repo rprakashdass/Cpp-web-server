@@ -13,6 +13,9 @@
 #include <cstring>
 #include <csignal>
 #include <ctime>
+#include <atomic>
+#include <fcntl.h>
+#include <errno.h>
 
 #include "../include/ThreadPool.h"
 #include "../include/Router.h"
@@ -20,7 +23,7 @@
 #include "../include/HTTPResponse.h"
 #include "../include/AppDispatcher.h"
 
-bool keepRunning = true;
+std::atomic<bool> keepRunning = true;
 
 // Colored terminal output
 #define RED     "\033[1;31m"
@@ -36,10 +39,11 @@ void signalHandler(int signum) {
 }
 
 int main(int argc, char* argv[]) {
-    std::signal(SIGINT, signalHandler);
+    std::signal(SIGINT, signalHandler); // CTRL + c
+    std::signal(SIGTERM, signalHandler); // KILL
 
     // CLI defaults
-    int port = 1111;
+    int port = 11111;
     int threadCount = 15;
     staticDir = "public";
 
@@ -75,6 +79,18 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    // Set Socket Level option for immediate restarting
+    int opt = 1;
+    if(setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1) {
+        std::cerr << RED << "[Error] setsockopt(SO_REUSEADDR) failed" << RESET << std::endl;
+        return 1;
+    }
+
+    // Set NON-BLOCKING
+    int flags = fcntl(server_socket, F_GETFL, 0);
+    // F_GETFL - Get current fd flags
+    fcntl(server_socket, F_SETFL, flags | O_NONBLOCK);
+
     // Bind socket
     sockaddr_in sockAddr{};
     sockAddr.sin_family = AF_INET;
@@ -97,7 +113,7 @@ int main(int argc, char* argv[]) {
     Router router;
     AppDispatcher app(router, staticDir);
 
-    // Register endpoints
+    // Register Action Handler Endpoints
     router.registerAction("health", [](const std::string&) {
         return R"({"status": "ok", "uptime": "24h"})";
     });
@@ -125,15 +141,35 @@ int main(int argc, char* argv[]) {
         }
     });
 
+
+    // Register routes
+    router.registerRoute("/health", [](const std::string&) {
+        return R"({"status": "ok", "uptime": "24h"})";
+    });
+
+    router.registerRoute("/version", [](const std::string&) {
+        return R"({"app": "LightC++ Server", "version": "1.0.0"})";
+    });
+
+    router.registerRoute("/", [](const std::string& /*body*/) {
+        return "Server is running perfectly!";
+    });
+
+
     // Accept clients
     while (keepRunning) {
         sockaddr_in client_addr{};
         socklen_t client_len = sizeof(client_addr);
         int client_socket = accept(server_socket, (sockaddr*)&client_addr, &client_len);
-        if (!keepRunning) break;
         if (client_socket == -1) {
-            std::cerr << RED << "[Error] Couldn't accept client" << RESET << std::endl;
-            continue;
+            // EAGAIN - Try Again, EWOULDBLOCK - Operation would block
+            if(errno == EAGAIN || errno == EWOULDBLOCK) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(100)); // avoid busy wait
+                continue;
+            } else {
+                std::cerr << RED << "[Error] Couldn't accept client" << RESET << std::endl;
+                break;
+            }
         }
 
         pool.enqueueTask([client_socket, &router, &app]() {

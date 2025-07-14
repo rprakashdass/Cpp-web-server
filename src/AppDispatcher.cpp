@@ -14,6 +14,13 @@ HTTPResponse AppDispatcher::HandleRequest(const HTTPRequest& request) {
         return actionDispatcher.dispatch(request);
     }
 
+    // Check if registered route
+    auto routeHandler = router.getRoute(path);
+    if (routeHandler) {
+        std::cout << "Matched registered route: " << path << "\n";
+        return router.route(request.path, request.body);
+    }
+
     // serve static file
     return staticServer.serve(path);
 }
