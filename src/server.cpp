@@ -45,7 +45,6 @@ int main(int argc, char* argv[]) {
     // CLI defaults
     int port = 11111;
     int threadCount = 15;
-    staticDir = "public";
 
     // Parse CLI arguments
     for (int i = 1; i < argc; ++i) {
@@ -68,6 +67,9 @@ int main(int argc, char* argv[]) {
         std::cerr << RED << "[Error] Thread count must be > 0" << RESET << std::endl;
         return 1;
     }
+
+    StaticServer staticServer;
+    staticServer.setStaticDir( (staticDir.empty() ? "public" : staticDir));
 
     std::cout << GREEN << "[Info] Server starting on port " << port
             << " with " << threadCount << " threads, serving static from " << staticDir << RESET << "\n";
@@ -111,7 +113,7 @@ int main(int argc, char* argv[]) {
 
     ThreadPool pool(threadCount);
     Router router;
-    AppDispatcher app(router, staticDir);
+    AppDispatcher app(router);
 
     // Register Action Handler Endpoints
     router.registerAction("health", [](const std::string&) {
@@ -151,7 +153,7 @@ int main(int argc, char* argv[]) {
         return R"({"app": "LightC++ Server", "version": "1.0.0"})";
     });
 
-    router.registerRoute("/", [](const std::string& /*body*/) {
+    router.registerRoute("/test", [](const std::string& /*body*/) {
         return "Server is running perfectly!";
     });
 

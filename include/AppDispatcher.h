@@ -7,12 +7,11 @@
 
 class AppDispatcher {
 public:
-    AppDispatcher(Router& router, const std::string& staticDir);
+    AppDispatcher(Router& router);
     HTTPResponse HandleRequest(const HTTPRequest& request);
 private:
     Router& router;
     ActionDispatcher actionDispatcher;
-    StaticServer staticServer;
 };
 
 #endif

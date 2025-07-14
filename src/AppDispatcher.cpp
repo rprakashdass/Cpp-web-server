@@ -1,7 +1,7 @@
 #include "../include/AppDispatcher.h"
 
-AppDispatcher::AppDispatcher(Router& router, const std::string& staticDir)
-    : router(router), actionDispatcher(router), staticServer(staticDir) {};
+AppDispatcher::AppDispatcher(Router& router)
+    : router(router), actionDispatcher(router) {};
 
 HTTPResponse AppDispatcher::HandleRequest(const HTTPRequest& request) {
     const std::string& path = request.path;
@@ -22,5 +22,5 @@ HTTPResponse AppDispatcher::HandleRequest(const HTTPRequest& request) {
     }
 
     // serve static file
-    return staticServer.serve(path);
+    return StaticServer::serve(path);
 }

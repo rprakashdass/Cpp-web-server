@@ -1,9 +1,13 @@
 #include "../include/StaticServer.h"
 
-StaticServer::StaticServer(const std::string& rootDir) : rootDir(rootDir) {}
+std::string StaticServer::rootDir = "";
+
+void StaticServer::setStaticDir(const std::string& path) {
+    rootDir = path;
+}
 
 HTTPResponse StaticServer::serve(const std::string& path) {
-    std::string filePath = rootDir + path;
+    std::string filePath = StaticServer::rootDir + path;
     if (filePath.back() == '/')
         filePath += "index.html";
 

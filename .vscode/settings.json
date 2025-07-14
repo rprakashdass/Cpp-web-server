@@ -52,7 +52,9 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "typeinfo": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "fstream": "cpp",
+        "filesystem": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }

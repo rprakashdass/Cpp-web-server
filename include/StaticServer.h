@@ -9,11 +9,10 @@
 
 class StaticServer {
 public:
-    explicit StaticServer(const std::string& rootDir);
-    HTTPResponse serve(const std::string& path);
-
+    static HTTPResponse serve(const std::string& path);
+    void setStaticDir(const std::string& path);
 private:
-    const std::string& rootDir;
+    static std::string rootDir;
 };
 
 #endif
