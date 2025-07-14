@@ -1,4 +1,4 @@
-#include "../include/Router.h"
+#include <Router.h>
 
 void Router::registerAction(const std::string& action, ActionHandler handler) {
     handlers[action] = handler;

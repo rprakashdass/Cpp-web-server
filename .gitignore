@@ -1,41 +1,69 @@
-# Prerequisites
-*.d
+# Build artifacts
+/build/
+/CMakeFiles/
+/Makefile
+/CMakeCache.txt
+/cmake_install.cmake
+/*.cmake
 
-# Compiled Object files
-*.slo
-*.lo
+# IDE files
+*.suo
+*.user
+*.userosscache
+*.sln
+*.vcxproj*
+*.ncb
+*.opensdf
+*.sdf
+*.psess
+*.vsp
+*.vsscc
+*.code-workspace
+
+# macOS
+.DS_Store
+
+# Linux
+*.swp
+*~
+
+# Logs
+*.log
+
+# Binaries
+*.out
 *.o
 *.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
-# Compiled Dynamic libraries
+*.exe
+*.a
 *.so
-*.dylib
 *.dll
 
-# Fortran module files
+# Tests
+/test-results/
+/*.gcno
+/*.gcda
+
+# C++ metadata
+*.dSYM/
+*.ipch/
+*.pch
 *.mod
-*.smod
+*.tlog
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
+# Compiled static and dynamic libraries
 *.lib
+*.dll
+*.dylib
 
-# Executables
-*.exe
-*.out
-*.app
+# Generated docs
+/docs/html/
+/docs/latex/
 
-# debug information files
-*.dwo
+# VSCode & CLion
+.vscode/
+.idea/
+
+# Custom folders
+/public/
+.env

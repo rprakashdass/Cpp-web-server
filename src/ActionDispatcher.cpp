@@ -1,4 +1,4 @@
-#include "../include/ActionDispatcher.h"
+#include <ActionDispatcher.h>
 
 ActionDispatcher::ActionDispatcher(Router& r) : router(r) {}
 

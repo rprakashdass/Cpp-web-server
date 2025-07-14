@@ -17,11 +17,11 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#include "../include/ThreadPool.h"
-#include "../include/Router.h"
-#include "../include/HTTPRequest.h"
-#include "../include/HTTPResponse.h"
-#include "../include/AppDispatcher.h"
+#include <ThreadPool.h>
+#include <Router.h>
+#include <HTTPRequest.h>
+#include <HTTPResponse.h>
+#include <AppDispatcher.h>
 
 std::atomic<bool> keepRunning = true;
 
@@ -69,7 +69,9 @@ int main(int argc, char* argv[]) {
     }
 
     StaticServer staticServer;
-    staticServer.setStaticDir( (staticDir.empty() ? "public" : staticDir));
+    std::string staticPath = std::filesystem::absolute((staticDir.empty() ? "../public" : staticDir)).string();
+    staticServer.setStaticDir(staticPath);
+    std::cout << "[StaticServer] Serving from: " << staticPath << std::endl;
 
     std::cout << GREEN << "[Info] Server starting on port " << port
             << " with " << threadCount << " threads, serving static from " << staticDir << RESET << "\n";
