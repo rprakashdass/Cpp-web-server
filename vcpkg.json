@@ -1,0 +1,10 @@
+{
+  "name": "lightcppframework",
+  "version": "0.1.0",
+  "description": "A lightweight, high-performance C++ application framework (POSIX standard) for web, desktop, and mobile runtimes.",
+  "homepage": "https://github.com/rprakashdass/light-cpp-framework",
+  "license": "MIT",
+  "dependencies": [
+    "nlohmann-json"
+  ]
+} 
