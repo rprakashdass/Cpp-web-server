@@ -1,4 +1,4 @@
-#include <HTTPResponse.h>
+#include <NanoHost/HTTPResponse.h>
 
 std::string HTTPResponse::getMimeType(const std::string& filePath) {
     static const std::unordered_map<std::string, std::string> mimeTypes = {

@@ -1,4 +1,4 @@
-#include <AppDispatcher.h>
+#include <NanoHost/AppDispatcher.h>
 
 AppDispatcher::AppDispatcher(Router& router)
     : router(router), actionDispatcher(router) {};

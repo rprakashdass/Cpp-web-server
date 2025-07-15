@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
-#include "../include/HTTPResponse.h"
+#include "HTTPResponse.h"
 
 class StaticServer {
 public:

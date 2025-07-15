@@ -17,11 +17,11 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#include <ThreadPool.h>
-#include <Router.h>
-#include <HTTPRequest.h>
-#include <HTTPResponse.h>
-#include <AppDispatcher.h>
+#include <NanoHost/ThreadPool.h>
+#include <NanoHost/Router.h>
+#include <NanoHost/HTTPRequest.h>
+#include <NanoHost/HTTPResponse.h>
+#include <NanoHost/AppDispatcher.h>
 
 std::atomic<bool> keepRunning = true;
 

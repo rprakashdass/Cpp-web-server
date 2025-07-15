@@ -1,9 +1,9 @@
 #ifndef APPDISPATCHER_H
 #define APPDISPATCHER_H
 
-#include "./ActionDispatcher.h"
-#include "./StaticServer.h"
-#include "./HTTPRequest.h"
+#include "ActionDispatcher.h"
+#include "StaticServer.h"
+#include "HTTPRequest.h"
 
 class AppDispatcher {
 public:

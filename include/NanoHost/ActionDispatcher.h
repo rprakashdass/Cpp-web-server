@@ -1,7 +1,7 @@
 #include "Router.h"
 #include "HTTPRequest.h"
 #include "HTTPResponse.h"
-#include "./nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 
 class ActionDispatcher {
 public:

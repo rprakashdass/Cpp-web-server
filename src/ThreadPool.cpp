@@ -1,4 +1,4 @@
-#include <ThreadPool.h>
+#include <NanoHost/ThreadPool.h>
 
 ThreadPool::ThreadPool(size_t numberOfThreads) : stop(false), activeTasks(0) {
     for(size_t i = 0;i < numberOfThreads;i++) {

@@ -4,7 +4,7 @@
 #include <string>
 #include <functional>
 #include <unordered_map>
-#include "../include/HTTPResponse.h"
+#include "HTTPResponse.h"
 
 class Router {
 public:

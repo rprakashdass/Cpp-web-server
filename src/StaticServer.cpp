@@ -1,4 +1,4 @@
-#include <StaticServer.h>
+#include <NanoHost/StaticServer.h>
 
 std::string StaticServer::rootDir = "";
 
