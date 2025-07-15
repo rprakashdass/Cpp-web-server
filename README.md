@@ -35,34 +35,6 @@ CODE_OF_CONDUCT.md
 
 ## Installation & Setup
 
-### Recommended: Install via [vcpkg](https://github.com/microsoft/vcpkg)
-
-You can easily install **NanoHost** using [vcpkg](https://github.com/microsoft/vcpkg), the C++ package manager:
-
-```bash
-# Step 1: Navigate to your vcpkg directory
-cd /path/to/vcpkg
-
-# Step 2: Add the NanoHost port (assuming your port is local or published)
-./vcpkg install nanohost
-```
-
-Then, in your CMake project:
-
-```cmake
-find_package(NanoHost CONFIG REQUIRED)
-target_link_libraries(your_project PRIVATE NanoHost)
-```
-
-Now you can include headers like:
-
-```cpp
-#include <NanoHost/AppDispatcher.h>
-#include <NanoHost/Router.h>
-```
-
----
-
 ### Build from Source (GitHub Clone)
 
 If you prefer building it directly:
