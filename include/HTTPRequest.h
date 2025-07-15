@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include <algorithm> // remove methode
+#include <algorithm>
 #include <unordered_map>
 
 class HTTPRequest {
